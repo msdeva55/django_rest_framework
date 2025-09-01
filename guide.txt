@@ -1,0 +1,23 @@
+create virtual environment  py -m venv .venv
+activate .venv\Scripts\activate
+pip install djangorestframework
+python manage.py runserver
+dgango-admin startproject SchoolMagagement .
+setting.py, installed apps, add rest_framework
+create database in mysql workbentch
+setting.py, database, add mysql details, like 
+name: db name, 
+          'USER' : 'root',
+        'PASSWORD' : 'admin',
+        'HOST' :'localhost',
+        'PORT' : '3306',
+
+save file 
+pip install mysqlclient
+python manage.py migrate
+then see default table in mysql database 
+python manage.py startapp Students
+setting.py, installed apps, add Students
+Students app,models.py, create models
+python manage.py makemigrations
+python manage.py migrate
