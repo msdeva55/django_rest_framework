@@ -57,3 +57,5 @@ that API add to project urls.py
 run server
 views.py, add name, age then save command, then runserver , student/, add data the click post , data send to mysql
 
+# create urls.py from Student app------------------------
+connect app/urls.py and project/urls.py
