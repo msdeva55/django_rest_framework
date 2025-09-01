@@ -1,7 +1,9 @@
-create virtual environment  py -m venv .venv
+#create virtual environment  py -m venv .venv
 activate .venv\Scripts\activate
 pip install djangorestframework
 python manage.py runserver
+
+#project creation----------------------------
 dgango-admin startproject SchoolMagagement .
 setting.py, installed apps, add rest_framework
 create database in mysql workbentch
@@ -15,9 +17,43 @@ name: db name,
 save file 
 pip install mysqlclient
 python manage.py migrate
-then see default table in mysql database 
+then see default table in mysql database
+
+#app creation---------------------------------
 python manage.py startapp Students
 setting.py, installed apps, add Students
-Students app,models.py, create models
+
+#create models--------------------
+Students app,models.py, create models like age, name and etc....
 python manage.py makemigrations
 python manage.py migrate
+
+#create Superuser for admin site------------------
+admin panel, python manage.py createsuperuser
+username: deva
+email:
+PASSWORD :
+y--- enter,Superuser created successfully.
+python manage.py runserver
+goto browser, http://127.0.0.1:8000/admin/
+give username, PASSWORD
+
+#admin site import models----------------
+admin.py, from .models import Student (models.py import into admin.py file)
+admin.site.register(Student)
+python manage.py runserver
+goto browser,
+Student table created in admin site, add data then check mysql.
+data add,update,delete in admin site.
+then see the changes in mysql
+browser admin site, show only object, not show in name, 
+goto models.py add this 
+def __str__(self):
+        return self.name
+
+#create API DRF----------------------------
+goto, Students,views.py, create API (class based views or function based views)
+that API add to project urls.py 
+run server
+views.py, add name, age then save command, then runserver , student/, add data the click post , data send to mysql
+
