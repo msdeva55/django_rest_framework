@@ -1,8 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Student, Task
-from .serializers import Task_Serializer
-
+from .models import *
+from .serializers import *
 class StudentAPI(APIView):
 
     def get(self, request):
@@ -55,6 +54,7 @@ class StudentAPI(APIView):
         return Response("Student data deleted")
 
 class TaskView(APIView):
+
 
     def get(self, request, task_id=None):
 
@@ -138,3 +138,46 @@ class TaskView(APIView):
         task.delete()
 
         return Response("Task deleted successfully")
+
+
+class RankSheetView(APIView):
+
+    def get(self, request, id=None):  
+
+        if id == None:
+
+            all_rank_sheets = RankSheet.objects.all()
+
+            rank_data = RankSheet_Serializer(all_rank_sheets, many=True).data
+
+            return Response(rank_data)
+
+        else:
+
+            rank = RankSheet.objects.get(id=id)
+
+            rank_data = RankSheet_Serializer(rank).data
+
+            return Response(rank_data)
+
+    def post(self,request):
+
+        total_marks = request.data['tamil'] + request.data['english'] + request.data['maths'] + request.data['science'] + request.data['social_science']
+
+        average_marks = total_marks / 5
+
+        if (request.data['tamil'] >=35) and (request.data['english'] >=35) and (request.data['maths'] >=35) and (request.data['science'] >=35) and (request.data['social_science'] >=35):
+            
+            student_result = True
+
+        else:
+
+            student_result = False
+
+        new_data = RankSheet(tamil = request.data['tamil'], english = request.data['english'], 
+        maths = request.data['maths'], science = request.data['science'], social_science = request.data['social_science'],
+        total = total_marks, average = average_marks,result = student_result)
+
+        new_data.save()
+
+        return Response("Rank sheet created successfully")

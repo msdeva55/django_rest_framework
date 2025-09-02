@@ -31,3 +31,15 @@ class Task(models.Model):
     task_name = models.CharField(max_length=200)
     description = models.TextField()
 
+class RankSheet(models.Model):
+
+    tamil = models.IntegerField(default=0)
+    english = models.IntegerField(default=0)
+    maths = models.IntegerField(default=0)
+    science = models.IntegerField(default=0)
+    social_science = models.IntegerField(default=0)
+    total = models.IntegerField(default=0)
+    average = models.FloatField(default=0.0)
+    result = models.BooleanField(default=False)
+    
+
