@@ -30,3 +30,4 @@ class Task(models.Model):
 
     task_name = models.CharField(max_length=200)
     description = models.TextField()
+

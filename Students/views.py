@@ -56,14 +56,31 @@ class StudentAPI(APIView):
 
 class TaskView(APIView):
 
+    def get(self, request, task_id=None):
 
-    def get(self, request):
+        if task_id == None:
 
-        all_task = Task.objects.all()
+            all_task = Task.objects.all()
 
-        task_data = Task_Serializer(all_task, many=True).data
+            task_data = Task_Serializer(all_task, many=True).data
 
-        return Response(task_data)
+            return Response(task_data)
+
+        else:
+
+            task = Task.objects.get(id=task_id)
+
+            task_data = Task_Serializer(task).data
+
+            return Response(task_data)
+
+    # def get(self, request):
+
+    #     all_task = Task.objects.all()
+
+    #     task_data = Task_Serializer(all_task, many=True).data
+
+    #     return Response(task_data)
 
     def post(self, request):
 
@@ -79,20 +96,8 @@ class TaskView(APIView):
 
             return Response(new_task.errors, status=400)
 
-
-class TaskViewById(APIView):
-
-    def get(self, request, task_id):
-
-        task = Task.objects.get(id=task_id)
-        
-        task_data = Task_Serializer(task).data
-        
-        return Response(task_data)
-        
     def patch(self, request, task_id):
-
-    
+        
         task = Task.objects.get(id=task_id)
 
         update_task = Task_Serializer(task, data=request.data, partial=True)
@@ -126,6 +131,7 @@ class TaskViewById(APIView):
             return Response(update_task.errors, status=400)   
 
     def delete(self, request, task_id):
+
 
         task = Task.objects.get(id=task_id)
 
