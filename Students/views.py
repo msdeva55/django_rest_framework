@@ -181,3 +181,34 @@ class RankSheetView(APIView):
         new_data.save()
 
         return Response("Rank sheet created successfully")
+
+
+    def patch(self,request,id):
+
+        total_marks = request.data['tamil'] + request.data['english'] + request.data['maths'] + request.data['science'] + request.data['social_science']
+
+        average_marks = total_marks / 5
+
+        if (request.data['tamil'] >=35) and (request.data['english'] >=35) and (request.data['maths'] >=35) and (request.data['science'] >=35) and (request.data['social_science'] >=35):
+            
+            student_result = True
+
+        else:
+
+            student_result = False
+
+        new_data.update(tamil = request.data['tamil'], english = request.data['english'], 
+        maths = request.data['maths'], science = request.data['science'], social_science = request.data['social_science'],
+        total = total_marks, average = average_marks,result = student_result)
+
+        new_data.save()
+
+        return Response("Rank sheet updated successfully")
+
+    def delete(self,request,id):
+
+        rank = RankSheet.objects.get(id=id)
+
+        rank.delete()
+
+        return Response("Rank sheet deleted successfully")
