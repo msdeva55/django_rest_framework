@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Student
+from .models import Student, Task
+from .serializers import Task_Serializer
 
 class StudentAPI(APIView):
 
@@ -45,9 +46,89 @@ class StudentAPI(APIView):
         return Response("Student Data updated")
 
     def delete(self, request, student_id):
+    
 
         student_data = Student.objects.get(id = student_id)
 
         student_data.delete()
 
         return Response("Student data deleted")
+
+class TaskView(APIView):
+
+
+    def get(self, request):
+
+        all_task = Task.objects.all()
+
+        task_data = Task_Serializer(all_task, many=True).data
+
+        return Response(task_data)
+
+    def post(self, request):
+
+        new_task = Task_Serializer(data=request.data)
+
+        if new_task.is_valid():
+
+            new_task.save()
+
+            return Response("New Task Created")
+
+        else:
+
+            return Response(new_task.errors, status=400)
+
+
+class TaskViewById(APIView):
+
+    def get(self, request, task_id):
+
+        task = Task.objects.get(id=task_id)
+        
+        task_data = Task_Serializer(task).data
+        
+        return Response(task_data)
+        
+    def patch(self, request, task_id):
+
+    
+        task = Task.objects.get(id=task_id)
+
+        update_task = Task_Serializer(task, data=request.data, partial=True)
+
+        if update_task.is_valid():
+
+            update_task.save()
+
+            return Response("Task updated successfully")
+
+        else:
+
+            return Response(update_task.errors, status=400) 
+
+
+    def put(self, request, task_id):
+
+    
+        task = Task.objects.get(id=task_id)
+
+        update_task = Task_Serializer(task, data=request.data, partial=True)
+
+        if update_task.is_valid():
+
+            update_task.save()
+
+            return Response("Task updated successfully")
+                
+        else:
+
+            return Response(update_task.errors, status=400)   
+
+    def delete(self, request, task_id):
+
+        task = Task.objects.get(id=task_id)
+
+        task.delete()
+
+        return Response("Task deleted successfully")

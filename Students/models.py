@@ -24,3 +24,9 @@ class Student(models.Model):
     def __str__(self):
 
         return self.name
+
+
+class Task(models.Model):
+
+    task_name = models.CharField(max_length=200)
+    description = models.TextField()
