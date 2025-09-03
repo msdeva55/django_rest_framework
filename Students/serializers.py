@@ -6,7 +6,7 @@ class Task_Serializer(ModelSerializer):
         model = Task
         fields = '__all__'
 
-class RankSheet_Serializer(ModelSerializer):
-    class Meta:
-        model = RankSheet
-        fields = '__all__'
+# class RankSheet_Serializer(ModelSerializer):
+#     class Meta:
+#         model = RankSheet
+#         fields = '__all__'

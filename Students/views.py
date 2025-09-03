@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
+from rest_framework.decorators import api_view
+
 class StudentAPI(APIView):
 
     def get(self, request):
@@ -140,7 +142,7 @@ class TaskView(APIView):
         return Response("Task deleted successfully")
 
 
-class RankSheetView(APIView):
+
 
     def get(self, request, id=None):  
 
@@ -212,3 +214,74 @@ class RankSheetView(APIView):
         rank.delete()
 
         return Response("Rank sheet deleted successfully")
+
+
+@api_view(['GET','POST'])
+def task_list_create(request):
+
+    if request.method == 'GET':
+
+        all_task = Task.objects.all()
+
+        task_data = Task_Serializer(all_task, many=True).data
+
+        return Response(task_data)
+
+    elif request.method == 'POST':
+
+        new_task = Task_Serializer(data=request.data)
+
+        if new_task.is_valid():
+
+            new_task.save()
+
+            return Response("New Task Created")
+
+        else:
+
+            return Response(new_task.errors, status=400)    
+
+@api_view(['GET','PATCH','PUT','DELETE'])
+def task_update_delete(request,id):
+
+    task = Task.objects.get(id=id)
+
+    if request.method == 'GET':
+
+        task_data = Task_Serializer(task).data
+
+        return Response(task_data)
+
+    elif request.method == 'PATCH':
+
+        update_task = Task_Serializer(task, data=request.data, partial=True)
+
+        if update_task.is_valid():
+
+            update_task.save()
+
+            return Response("Task updated successfully")
+
+        else:
+
+            return Response(update_task.errors, status=400) 
+
+    elif request.method == 'PUT':
+
+        update_task = Task_Serializer(task, data=request.data)
+
+        if update_task.is_valid():
+
+            update_task.save()
+
+            return Response("Task updated successfully")
+
+        else:
+
+            return Response(update_task.errors, status=400)
+
+    elif request.method == 'DELETE':
+
+        task.delete()
+
+        return Response("Task deleted successfully")
