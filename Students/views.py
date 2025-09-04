@@ -10,19 +10,21 @@ class StudentAPI(APIView):
 
         all_students = Student.objects.all()
 
-        student_list = []
+        student_data = Student_Serializer(all_students, many=True).data
 
-        for s in all_students:
+        # student_list = []
 
-            student_dict = {
-                "id" : s.id,
-                "name" : s.name,
-                "age" : s.age
-            }
+        # for s in all_students:
 
-            student_list.append(student_dict)
+        #     student_dict = {
+        #         "id" : s.id,
+        #         "name" : s.name,
+        #         "age" : s.age
+        #     }
 
-        return Response(student_list)
+        #     student_list.append(student_dict)
+
+        return Response(student_data)
 
     def post(self, request):
 
@@ -64,7 +66,7 @@ class TaskView(APIView):
 
             all_task = Task.objects.all()
 
-            task_data = Task_Serializer(all_task, many=True).data
+            task_data = Task_data_Serializer(all_task, many=True).data
 
             return Response(task_data)
 
@@ -84,19 +86,23 @@ class TaskView(APIView):
 
     #     return Response(task_data)
 
-    def post(self, request):
+    def post(self, request, task_id=None, *args, **kwargs):
 
-        new_task = Task_Serializer(data=request.data)
+        new_task = Task(student_reference_id = request.data['student_reference'], task_name=request.data['task_name'], description=request.data['description'])
 
-        if new_task.is_valid():
+        new_task.save()
+        return Response("New Task Created")
+        # new_task = Task_data_Serializer(data=request.data)
 
-            new_task.save()
+        # if new_task.is_valid():
 
-            return Response("New Task Created")
+        #     new_task.save()
 
-        else:
+        #     return Response("New Task Created")
 
-            return Response(new_task.errors, status=400)
+        # else:
+
+        #     return Response(new_task.errors, status=400)
 
     def patch(self, request, task_id):
         
@@ -144,70 +150,70 @@ class TaskView(APIView):
 
 
 
-    def get(self, request, id=None):  
+    # def get(self, request, id=None):  
 
-        if id == None:
+    #     if id == None:
 
-            all_rank_sheets = RankSheet.objects.all()
+    #         all_rank_sheets = RankSheet.objects.all()
 
-            rank_data = RankSheet_Serializer(all_rank_sheets, many=True).data
+    #         rank_data = RankSheet_Serializer(all_rank_sheets, many=True).data
 
-            return Response(rank_data)
+    #         return Response(rank_data)
 
-        else:
+    #     else:
 
-            rank = RankSheet.objects.get(id=id)
+    #         rank = RankSheet.objects.get(id=id)
 
-            rank_data = RankSheet_Serializer(rank).data
+    #         rank_data = RankSheet_Serializer(rank).data
 
-            return Response(rank_data)
+    #         return Response(rank_data)
 
-    def post(self,request):
+    # def post(self,request):
 
-        total_marks = request.data['tamil'] + request.data['english'] + request.data['maths'] + request.data['science'] + request.data['social_science']
+    #     total_marks = request.data['tamil'] + request.data['english'] + request.data['maths'] + request.data['science'] + request.data['social_science']
 
-        average_marks = total_marks / 5
+    #     average_marks = total_marks / 5
 
-        if (request.data['tamil'] >=35) and (request.data['english'] >=35) and (request.data['maths'] >=35) and (request.data['science'] >=35) and (request.data['social_science'] >=35):
+    #     if (request.data['tamil'] >=35) and (request.data['english'] >=35) and (request.data['maths'] >=35) and (request.data['science'] >=35) and (request.data['social_science'] >=35):
             
-            student_result = True
+    #         student_result = True
 
-        else:
+    #     else:
 
-            student_result = False
+    #         student_result = False
 
-        new_data = RankSheet(tamil = request.data['tamil'], english = request.data['english'], 
-        maths = request.data['maths'], science = request.data['science'], social_science = request.data['social_science'],
-        total = total_marks, average = average_marks,result = student_result)
+    #     new_data = RankSheet(tamil = request.data['tamil'], english = request.data['english'], 
+    #     maths = request.data['maths'], science = request.data['science'], social_science = request.data['social_science'],
+    #     total = total_marks, average = average_marks,result = student_result)
 
-        new_data.save()
+    #     new_data.save()
 
-        return Response("Rank sheet created successfully")
+    #     return Response("Rank sheet created successfully")
 
 
-    def patch(self,request,id):
+    # def patch(self,request,id):
 
-        total_marks = request.data['tamil'] + request.data['english'] + request.data['maths'] + request.data['science'] + request.data['social_science']
+    #     total_marks = request.data['tamil'] + request.data['english'] + request.data['maths'] + request.data['science'] + request.data['social_science']
 
-        average_marks = total_marks / 5
+    #     average_marks = total_marks / 5
 
-        if (request.data['tamil'] >=35) and (request.data['english'] >=35) and (request.data['maths'] >=35) and (request.data['science'] >=35) and (request.data['social_science'] >=35):
+    #     if (request.data['tamil'] >=35) and (request.data['english'] >=35) and (request.data['maths'] >=35) and (request.data['science'] >=35) and (request.data['social_science'] >=35):
             
-            student_result = True
+    #         student_result = True
 
-        else:
+    #     else:
 
-            student_result = False
+    #         student_result = False
 
-        new_data.update(tamil = request.data['tamil'], english = request.data['english'], 
-        maths = request.data['maths'], science = request.data['science'], social_science = request.data['social_science'],
-        total = total_marks, average = average_marks,result = student_result)
+    #     new_data.update(tamil = request.data['tamil'], english = request.data['english'], 
+    #     maths = request.data['maths'], science = request.data['science'], social_science = request.data['social_science'],
+    #     total = total_marks, average = average_marks,result = student_result)
 
-        new_data.save()
+    #     new_data.save()
 
-        return Response("Rank sheet updated successfully")
+    #     return Response("Rank sheet updated successfully")
 
-    def delete(self,request,id):
+    # def delete(self,request,id):
 
         rank = RankSheet.objects.get(id=id)
 
@@ -215,7 +221,7 @@ class TaskView(APIView):
 
         return Response("Rank sheet deleted successfully")
 
-
+#FBV
 @api_view(['GET','POST'])
 def task_list_create(request):
 
@@ -285,3 +291,5 @@ def task_update_delete(request,id):
         task.delete()
 
         return Response("Task deleted successfully")
+
+

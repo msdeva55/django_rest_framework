@@ -28,19 +28,19 @@ class Student(models.Model):
 
 class Task(models.Model):
 
-    student_reference = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
+    student_reference = models.ForeignKey(Student,related_name='all_tasks', null=True, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=200)
     description = models.TextField()
 
-# class RankSheet(models.Model):
+class RankSheet(models.Model):
 
-#     tamil = models.IntegerField(default=0)
-#     english = models.IntegerField(default=0)
-#     maths = models.IntegerField(default=0)
-#     science = models.IntegerField(default=0)
-#     social_science = models.IntegerField(default=0)
-#     total = models.IntegerField(default=0)
-#     average = models.FloatField(default=0.0)
-#     result = models.BooleanField(default=False)
+    tamil = models.IntegerField(default=0)
+    english = models.IntegerField(default=0)
+    maths = models.IntegerField(default=0)
+    science = models.IntegerField(default=0)
+    social_science = models.IntegerField(default=0)
+    total = models.IntegerField(default=0)
+    average = models.FloatField(default=0.0)
+    result = models.BooleanField(default=False)
     
 
