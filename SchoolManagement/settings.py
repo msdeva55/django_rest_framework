@@ -1,5 +1,6 @@
 
 from pathlib import Path
+from datetime import timedelta
 
 
 
@@ -31,6 +32,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'Students',
     'Library',
+    'Authentication',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -111,3 +114,18 @@ STATIC_URL = 'static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'Authentication.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN-LIFETIME': timedelta(minutes=30),
+    'REFERESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFERSH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
