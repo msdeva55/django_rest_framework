@@ -1,7 +1,8 @@
 
 from pathlib import Path
 from datetime import timedelta
-
+from decouple import config
+#from collections import Sequence
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,9 +35,12 @@ INSTALLED_APPS = [
     'Library',
     'Authentication',
     'rest_framework_simplejwt',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -44,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'SchoolManagement.urls'
@@ -70,7 +75,7 @@ WSGI_APPLICATION = 'SchoolManagement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'school_db',
+        'NAME': config('database'),
         'USER' : 'root',
         'PASSWORD' : 'admin',
         'HOST' :'localhost',
@@ -124,8 +129,14 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN-LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFERESH_TOKEN_LIFETIME': timedelta(days=1),
     # 'ROTATE_REFERSH_TOKENS': True,
     # 'BLACKLIST_AFTER_ROTATION': True,
 }
+
+#CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:5500',
+]

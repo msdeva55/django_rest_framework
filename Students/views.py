@@ -4,6 +4,8 @@ from .models import *
 from .serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from decouple import config
 
 class StudentAPI(APIView):
 
@@ -66,6 +68,10 @@ class TaskView(APIView):
     def get(self, request, task_id=None):
 
         if task_id == None:
+
+            person_name = config('name')
+
+            print(person_name)
 
             all_task = Task.objects.all()
 
