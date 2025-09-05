@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import *
 from django.contrib.auth import authenticate
+from .serializers import *
 
 class UserView(APIView):
 
@@ -19,9 +20,16 @@ class UserLoginView(APIView):
 
     def post(self, request):
 
-        user_verification = authenticate(username = request.data['username'], password = request.data['password'])
+        # user_verification = authenticate(username = request.data['username'], password = request.data['password'])
 
-        if user_verification == None:
-            return Response("Invalid Credentials", status=401)
-        else:   
-            return Response("User logged in")
+        # if user_verification == None:
+        #     return Response("Invalid Credentials", status=401)
+        # else:   
+        #     return Response("User logged in")
+
+        user_data = CustomToken_serializer(data = request.data)
+
+        if user_data.is_valid():
+            return Response(user_data.validated_data, status=200)
+        else:
+            return Response(user_data.errors, status=400)
